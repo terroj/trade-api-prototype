@@ -1,0 +1,25 @@
+{
+    "name": "terroj/trade-api-prototype",
+    "description": "Payeer API Client",
+    "keywords": [
+        "trade",
+        "payeer"
+    ],
+    "type": "library",
+    "require": {
+        "php": ">=8.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Terro",
+            "email": "wali7981@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Terroj\\PayeerClient\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
