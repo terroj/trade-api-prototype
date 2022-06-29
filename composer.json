@@ -11,6 +11,7 @@
         "guzzlehttp/guzzle": "7.4.5"
     },
     "require-dev": {
+        "ext-mbstring": "*",
         "symfony/var-dumper": "^6.1",
         "phpunit/phpunit": "^9.5",
         "mockery/mockery": "^1.5"
