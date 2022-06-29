@@ -184,18 +184,12 @@ class PayeerResponse extends Response
      * @param mixed $default Default value
      * @return mixed|null
      */
-    private function GetArrayValue(array|null $array, string $key, mixed $default = null): ?mixed
+    private function GetArrayValue(array|null $array, string $key, mixed $default = null)
     {
-        if (is_array($array)) {
-            if (is_null($key)) {
-                return $array;
-            }
-
-            if (array_key_exists($key, $array)) {
-                return $array[$key];
-            }
+        if (is_null($key)) {
+            return $array;
         }
 
-        return $default;
+        return $array[$key] ?? $default;
     }
 }
