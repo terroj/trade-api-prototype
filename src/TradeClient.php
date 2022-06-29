@@ -2,11 +2,14 @@
 
 namespace Terroj\PayeerClient;
 
-use Exception;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 
+/**
+ * Http client for sending requests to the Payeer trade API.
+ */
 class TradeClient
 {
-
     /**
      * Gets a payeer client id.
      *
@@ -40,112 +43,96 @@ class TradeClient
         $this->url = $url ?? static::DEFAULT_PAYEER_URL;
     }
 
-    private function Request($req = [])
+    /**
+     * Sends a request to the specified Payeer trade API method.
+     *
+     * @param TradeMethods $method Any trade method.
+     * @param array $body Request body.
+     * @return PayeerResponse
+     * @throws RequestException If a request error occurred.
+     */
+    public function Request(TradeMethods $method, array $body = [])
     {
-        $msec = round(microtime(true) * 1000);
-        $req['post']['ts'] = $msec;
+        $client = $this->MakeDefaultHttpClient();
+        $timestamp = $this->GetCurrentTimeStamp();
 
-        $post = json_encode($req['post']);
+        $id = $this->id;
+        $key = $this->key;
 
-        $sign = hash_hmac('sha256', $req['method'] . $post, $this->key);
+        $body = $this->SerializeBody(
+            array_merge($body, ['ts' => $timestamp])
+        );
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://payeer.com/api/trade/" . $req['method']);
+        $sign = $this->SignBody($method, $key, $body);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $headers = [
+            'API-ID' => $id,
+            'API-SIGN' => $sign,
+            'Content-Type' => 'application/json'
+        ];
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "Content-Type: application/json",
-            "API-ID: " . $this->id,
-            "API-SIGN: " . $sign
-        ));
+        $request = new Request('POST', $method->value, $headers, $body);
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        $response = new PayeerResponse(
+            $client->send($request)
+        );
 
-        $response = json_decode($response, true);
-
-        if ($response['success'] !== true) {
-            $this->error = $response['error'];
-
-            throw new Exception($response['error']['code']);
+        if ($response->IsError()) {
+            throw RequestException::create($request, $response);
         }
 
         return $response;
     }
 
-
-    public function GetError()
+    /**
+     * Creates the default guzzle http client with base uri.
+     *
+     * @return \GuzzleHttp\Client
+     */
+    public function MakeDefaultHttpClient(): \GuzzleHttp\Client
     {
-        return $this->error;
+        return new \GuzzleHttp\Client([
+            'base_uri' => $this->url,
+        ]);
     }
 
-    public function Info()
-    {
-        $response = $this->Request(array(
-            'method' => 'info',
-        ));
-
-        return $response;
+    /**
+     * Creates a sign of the request body.
+     *
+     * @param TradeMethods $method Api method.
+     * @param string $key Api private key.
+     * @param string $body Serialized request body.
+     * @param string $algo Sign algorithm.
+     * @return string String that contains the signed request body.
+     */
+    protected function SignBody(
+        TradeMethods $method,
+        string $key,
+        string $body,
+        string $algo = 'sha256'
+    ): string {
+        return hash_hmac($algo, $method->value . $body, $key);
     }
 
-    public function Orders($pair = 'BTC_USDT')
+    /**
+     * Serializes a request body to a string.
+     *
+     * @param array $body Request body.
+     * @return string
+     */
+    protected function SerializeBody(array $body): string
     {
-        $response = $this->Request(array(
-            'method' => 'orders',
-            'post' => array(
-                'pair' => $pair,
-            ),
-        ));
-
-        return $response['pairs'];
+        return json_encode($body);
     }
 
-
-    public function Account()
+    /**
+     * Returns the current timestamp.
+     *
+     * @return float
+     */
+    protected function GetCurrentTimeStamp(): float
     {
-        $response = $this->Request(array(
-            'method' => 'account',
-        ));
-
-        return $response['balances'];
-    }
-
-
-    public function OrderCreate($req = array())
-    {
-        $response = $this->Request(array(
-            'method' => 'order_create',
-            'post' => $req,
-        ));
-
-        return $response;
-    }
-
-
-    public function OrderStatus($req = array())
-    {
-        $response = $this->Request(array(
-            'method' => 'order_status',
-            'post' => $req,
-        ));
-
-        return $response['order'];
-    }
-
-
-    public function MyOrders($req = array())
-    {
-        $response = $this->Request(array(
-            'method' => 'my_orders',
-            'post' => $req,
-        ));
-
-        return $response['items'];
+        return round(microtime(true) * 1000);
     }
 }
