@@ -10,6 +10,11 @@
         "php": ">=8.1",
         "guzzlehttp/guzzle": "7.4.5"
     },
+    "require-dev": {
+        "symfony/var-dumper": "^6.1",
+        "phpunit/phpunit": "^9.5",
+        "mockery/mockery": "^1.5"
+    },
     "license": "MIT",
     "authors": [
         {
@@ -20,6 +25,11 @@
     "autoload": {
         "psr-4": {
             "Terroj\\PayeerClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Terroj\\PayeerClient\\Tests\\": "tests/"
         }
     }
 }
