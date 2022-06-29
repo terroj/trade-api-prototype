@@ -4,11 +4,12 @@ namespace Terroj\PayeerClient;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
+use Terroj\PayeerClient\Contacts\TradeClientInterface;
 
 /**
  * Http client for sending requests to the Payeer trade API.
  */
-class TradeClient
+class TradeClient implements TradeClientInterface
 {
     /**
      * Gets a payeer client id.

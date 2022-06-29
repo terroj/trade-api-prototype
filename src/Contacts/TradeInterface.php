@@ -1,34 +1,14 @@
 <?php
 
-namespace Terroj\PayeerClient;
+namespace Terroj\PayeerClient\Contacts;
 
-use Terroj\PayeerClient\Contacts\TradeClientInterface;
-use Terroj\PayeerClient\Contacts\TradeInterface;
+use Terroj\PayeerClient\PayeerResponse;
 
 /**
- * Payeer trade client. 
+ * Payeer trade client interface. 
  */
-class Trade implements TradeInterface
+interface TradeInterface
 {
-    /**
-     * Gets or sets the trade client.
-     *
-     * @var TradeClientInterface
-     */
-    private TradeClientInterface $client;
-
-    /**
-     * Creates a new instance of Trade.
-     *
-     * @param string $id An API Client id.
-     * @param string $key An API Client key.
-     * @param string|null $url The Payeer URL address, if don't provided, uses the default URL address.
-     */
-    public function __construct(string $id, string $key, string $url = null)
-    {
-        $this->client = new TradeClient($id, $key, $url);
-    }
-
     /**
      * Returns limits, available pairs and their parameters.
      *
@@ -45,10 +25,7 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function info(): array
-    {
-        return $this->client->request(TradeMethods::INFO)->getArrayResponse();
-    }
+    public function info(): array;
 
     /**
      * Returns available orders for the specified pairs.
@@ -67,14 +44,7 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function orders(string $pair = 'BTC_USDT'): array
-    {
-        $response = $this->client->request(TradeMethods::ORDERS, [
-            'pair' => $pair
-        ])->getArrayResponse();
-
-        return $response['pairs'];
-    }
+    public function orders(string $pair = 'BTC_USDT'): array;
 
     /**
      * Returns the user's balance.
@@ -92,12 +62,7 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function account(): array
-    {
-        $response = $this->client->request(TradeMethods::ACCOUNT)->getArrayResponse();
-
-        return $response['balances'];
-    }
+    public function account(): array;
 
     /**
      * Creates an order of supported types: limit, market, stop limit.
@@ -122,10 +87,7 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function orderCreate(array $body = []): array
-    {
-        return $this->client->request(TradeMethods::ORDER_CREATE, $body)->getArrayResponse();
-    }
+    public function orderCreate(array $body = []): array;
 
     /**
      * Returns detailed information about your order by id.
@@ -146,12 +108,7 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function orderStatus(array $body = []): PayeerResponse
-    {
-        $response = $this->client->request(TradeMethods::ORDER_STATUS, $body);
-
-        return $response['order'];
-    }
+    public function orderStatus(array $body = []): PayeerResponse;
 
     /**
      * Returns detailed information about your order by id.
@@ -173,10 +130,5 @@ class Trade implements TradeInterface
      * }
      * ```
      */
-    public function myOrders(array $body = []): PayeerResponse
-    {
-        $response = $this->client->request(TradeMethods::MY_ORDERS, $body);
-
-        return $response['items'];
-    }
+    public function myOrders(array $body = []): PayeerResponse;
 }
