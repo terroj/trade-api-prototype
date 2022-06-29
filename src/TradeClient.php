@@ -46,13 +46,17 @@ class TradeClient
     /**
      * Sends a request to the specified Payeer trade API method.
      *
-     * @param TradeMethods $method Any trade method.
+     * @param TradeMethods|string $method Any trade method.
      * @param array $body Request body.
      * @return PayeerResponse
      * @throws RequestException If a request error occurred.
      */
-    public function Request(TradeMethods $method, array $body = [])
+    public function Request(TradeMethods|string $method, array $body = [])
     {
+        if ($method instanceof TradeMethods) {
+            $method = $method->value;
+        }
+
         $client = $this->MakeDefaultHttpClient();
         $timestamp = $this->GetCurrentTimeStamp();
 
@@ -72,7 +76,7 @@ class TradeClient
             'Content-Type' => 'application/json'
         ];
 
-        $request = new Request('POST', $method->value, $headers, $body);
+        $request = new Request('POST', $method, $headers, $body);
 
         $response = new PayeerResponse(
             $client->send($request)
@@ -100,19 +104,19 @@ class TradeClient
     /**
      * Creates a sign of the request body.
      *
-     * @param TradeMethods $method Api method.
+     * @param string $method Api method.
      * @param string $key Api private key.
      * @param string $body Serialized request body.
      * @param string $algo Sign algorithm.
      * @return string String that contains the signed request body.
      */
     protected function SignBody(
-        TradeMethods $method,
+        string $method,
         string $key,
         string $body,
         string $algo = 'sha256'
     ): string {
-        return hash_hmac($algo, $method->value . $body, $key);
+        return hash_hmac($algo, $method . $body, $key);
     }
 
     /**
