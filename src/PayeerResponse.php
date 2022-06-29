@@ -76,6 +76,17 @@ class PayeerResponse extends Response
     }
 
     /**
+     * Gets the Payeer error code.
+     *
+     * @param array $content
+     * @return string|null
+     */
+    public function GetErrorCode(): string|null
+    {
+        return $this->GetPayeerErrorCode($this->GetArrayResponse());
+    }
+
+    /**
      * Determines if the request failed.
      *
      * @return boolean
