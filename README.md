@@ -7,7 +7,7 @@ This package is designed for easy use of the trade API of Payeer.
 Require this package with Composer:
 
 ```bash
-composer require terroj/trade-api-prototype@1.0.0
+composer require terroj/trade-api-prototype:1.0.0
 ```
 
 ### Usage
@@ -92,7 +92,7 @@ Install [Composer](https://getcomposer.org/doc/00-intro.md) to your project.
 Require this package with Composer:
 
 ```bash
-composer require terroj/trade-api-prototype@0.0.1
+composer require terroj/trade-api-prototype:0.0.1
 ```
 
 #### Step 3
