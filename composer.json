@@ -23,6 +23,9 @@
         }
     ],
     "autoload": {
+        "files": [
+            "src/ApiTradePayeer.php"
+        ],
         "psr-4": {
             "Terroj\\PayeerClient\\": "src/"
         }
