@@ -55,7 +55,7 @@ class Api_Trade_Payeer
      */
     public function __construct($params = [])
     {
-        $this->trade = new Trade($params['id'], $params['key'], $params['url']);
+        $this->trade = new Trade($params['id'], $params['key'], $params['url'] ?? null);
     }
 
     /**
