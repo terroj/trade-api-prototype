@@ -22,14 +22,14 @@ try {
     // Creates an instance of Payeer.
     $payeer = new Payeer($id, $key);
     // Request info API method.
-    $result = $payeer->Info();
+    $result = $payeer->info();
 } catch (RequestException $exception) {
     // Gets the Payeer response.
     /** @var PayeerResponse $response */
     $response = $exception->getResponse();
 
     // Retrieves the Payeer error.
-    $error = $response->GetError();
+    $error = $response->getError();
 } catch (\Throwable $exception) {
     // Handles another exception.
     // ...
@@ -48,7 +48,7 @@ try {
     // Creates an instance of Payeer.
     $client = new TradeClient($id, $key);
     // Request info API method.
-    $response = $client->Request('another-method', ['param1' => 100]);
+    $response = $client->request('another-method', ['param1' => 100]);
 
     // ...
 } catch (RequestException $exception) {
@@ -57,7 +57,7 @@ try {
     $response = $exception->getResponse();
 
     // Retrieves the Payeer error.
-    $error = $response->GetError();
+    $error = $response->getError();
 } catch (\Throwable $exception) {
     // Handles another exception.
     // ...
@@ -122,9 +122,9 @@ with this:
 ```php
 try {
     $trade = new Trade($id, $key);
-    $result = $trade->Info();
+    $result = $trade->info();
 } catch (RequestException $exception) {
-    $error = $exception->getResponse()->GetError();
+    $error = $exception->getResponse()->getError();
 } catch (\Throwable $exception) {
     // ...
 }

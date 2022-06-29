@@ -53,16 +53,16 @@ class TradeClientTest extends TestCase
         )->andReturn($response);
 
         // Assert
-        $response = $client->Request(TradeMethods::ACCOUNT);
+        $response = $client->request(TradeMethods::ACCOUNT);
 
         // Act
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals($body, $response->getBody()->getContents());
 
-        $this->assertTrue($response->IsSuccess());
-        $this->assertFalse($response->IsError());
-        $this->assertTrue($response->GetArrayResponse()['success']);
-        $this->assertEquals($USDTotal, $response->GetArrayResponse()['balances']['USD']['total']);
+        $this->assertTrue($response->isSuccess());
+        $this->assertFalse($response->isError());
+        $this->assertTrue($response->getArrayResponse()['success']);
+        $this->assertEquals($USDTotal, $response->getArrayResponse()['balances']['USD']['total']);
     }
 }

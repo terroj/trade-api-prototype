@@ -34,17 +34,17 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $info = $trade->Info();
+     *     $info = $trade->info();
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     // ...
      * }
      * ```
      */
-    public function Info(): array
+    public function info(): array
     {
-        return $this->client->Request(TradeMethods::INFO)->GetArrayResponse();
+        return $this->client->request(TradeMethods::INFO)->getArrayResponse();
     }
 
     /**
@@ -56,19 +56,19 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $pairs = $trade->Orders('BTC_USDT');
+     *     $pairs = $trade->orders('BTC_USDT');
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     //
      * }
      * ```
      */
-    public function Orders(string $pair = 'BTC_USDT'): array
+    public function orders(string $pair = 'BTC_USDT'): array
     {
-        $response = $this->client->Request(TradeMethods::ORDERS, [
+        $response = $this->client->request(TradeMethods::ORDERS, [
             'pair' => $pair
-        ])->GetArrayResponse();
+        ])->getArrayResponse();
 
         return $response['pairs'];
     }
@@ -81,17 +81,17 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $balances = $trade->Account();
+     *     $balances = $trade->account();
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     //
      * }
      * ```
      */
-    public function Account(): array
+    public function account(): array
     {
-        $response = $this->client->Request(TradeMethods::ACCOUNT)->GetArrayResponse();
+        $response = $this->client->request(TradeMethods::ACCOUNT)->getArrayResponse();
 
         return $response['balances'];
     }
@@ -105,7 +105,7 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $orders = $trade->OrderCreate([
+     *     $orders = $trade->orderCreate([
      *         'pair' => 'TRX_USD',
      *         'type' => 'limit',
      *         'action' => 'buy, sell',
@@ -113,15 +113,15 @@ class Trade
      *         'price' => '0.08',
      *     ]);
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     //
      * }
      * ```
      */
-    public function OrderCreate(array $body = []): array
+    public function orderCreate(array $body = []): array
     {
-        return $this->client->Request(TradeMethods::ORDER_CREATE, $body)->GetArrayResponse();
+        return $this->client->request(TradeMethods::ORDER_CREATE, $body)->getArrayResponse();
     }
 
     /**
@@ -133,19 +133,19 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $status = $trade->OrderStatus([
+     *     $status = $trade->orderStatus([
      *         'order_id' => 37054293,
      *     ]);
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     //
      * }
      * ```
      */
-    public function OrderStatus(array $body = []): PayeerResponse
+    public function orderStatus(array $body = []): PayeerResponse
     {
-        $response = $this->client->Request(TradeMethods::ORDER_STATUS, $body);
+        $response = $this->client->request(TradeMethods::ORDER_STATUS, $body);
 
         return $response['order'];
     }
@@ -159,20 +159,20 @@ class Trade
      * ```
      * try {
      *     $trade = new Trade($id, $key);
-     *     $status = $trade->MyOrders([
+     *     $status = $trade->myOrders([
      *         'pair' => 'BTC_USD,TRX_USD',
      *         'action' => 'buy, sell'
      *     ]);
      * } catch (RequestException $exception) {
-     *     $error = $exception->getResponse()->GetError();
+     *     $error = $exception->getResponse()->getError();
      * } catch (\Throwable $exception) {
      *     //
      * }
      * ```
      */
-    public function MyOrders(array $body = []): PayeerResponse
+    public function myOrders(array $body = []): PayeerResponse
     {
-        $response = $this->client->Request(TradeMethods::MY_ORDERS, $body);
+        $response = $this->client->request(TradeMethods::MY_ORDERS, $body);
 
         return $response['items'];
     }

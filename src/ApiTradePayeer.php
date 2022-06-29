@@ -24,9 +24,9 @@ use Terroj\PayeerClient\PayeerResponse;
  * ```
  * try {
  *     $trade = new Trade($id, $key);
- *     $info = $trade->Info();
+ *     $info = $trade->info();
  * } catch (RequestException $exception) {
- *     $error = $exception->getResponse()->GetError();
+ *     $error = $exception->getResponse()->getError();
  * } catch (\Throwable $exception) {
  *     // ...
  * }
@@ -76,7 +76,7 @@ class Api_Trade_Payeer
     public function Info(): array
     {
         return $this->handle(function () {
-            return $this->trade->Info();
+            return $this->trade->info();
         });
     }
 
@@ -89,7 +89,7 @@ class Api_Trade_Payeer
     public function Orders($pair = 'BTC_USDT'): array
     {
         return $this->handle(function () use ($pair) {
-            return $this->trade->Orders($pair);
+            return $this->trade->orders($pair);
         });
     }
 
@@ -101,7 +101,7 @@ class Api_Trade_Payeer
     public function Account(): array
     {
         return $this->handle(function () {
-            return $this->trade->Account();
+            return $this->trade->account();
         });
     }
 
@@ -114,7 +114,7 @@ class Api_Trade_Payeer
     public function OrderCreate($body = []): array
     {
         return $this->handle(function () use ($body) {
-            return $this->trade->OrderCreate($body);
+            return $this->trade->orderCreate($body);
         });
     }
 
@@ -127,7 +127,7 @@ class Api_Trade_Payeer
     public function OrderStatus($body = []): array
     {
         return $this->handle(function () use ($body) {
-            return $this->trade->OrderStatus($body);
+            return $this->trade->orderStatus($body);
         });
     }
 
@@ -140,7 +140,7 @@ class Api_Trade_Payeer
     public function MyOrders($body = []): array
     {
         return $this->handle(function () use ($body) {
-            return $this->trade->MyOrders($body);
+            return $this->trade->myOrders($body);
         });
     }
 
@@ -152,9 +152,9 @@ class Api_Trade_Payeer
             /** @var PayeerResponse $response */
             $response = $exception->getResponse();
 
-            $this->lastError = $response->GetError();
+            $this->lastError = $response->getError();
 
-            throw new Exception($response->GetErrorCode());
+            throw new Exception($response->getErrorCode());
         }
     }
 }

@@ -10,6 +10,6 @@ $key = "y9ibLasdsdadPY9v";
 // Creates an instance of Payeer.
 $payeer = new Trade($id, $key);
 // Request info API method.
-$result = $payeer->Info();
+$result = $payeer->info();
 
 dd($result);

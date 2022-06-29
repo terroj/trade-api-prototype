@@ -51,23 +51,23 @@ class TradeClient
      * @return PayeerResponse
      * @throws RequestException If a request error occurred.
      */
-    public function Request(TradeMethods|string $method, array $body = [])
+    public function request(TradeMethods|string $method, array $body = [])
     {
         if ($method instanceof TradeMethods) {
             $method = $method->value;
         }
 
-        $client = $this->MakeDefaultHttpClient();
-        $timestamp = $this->GetCurrentTimeStamp();
+        $client = $this->makeDefaultHttpClient();
+        $timestamp = $this->getCurrentTimeStamp();
 
         $id = $this->id;
         $key = $this->key;
 
-        $body = $this->SerializeBody(
+        $body = $this->serializeBody(
             array_merge($body, ['ts' => $timestamp])
         );
 
-        $sign = $this->SignBody($method, $key, $body);
+        $sign = $this->signBody($method, $key, $body);
 
 
         $headers = [
@@ -82,7 +82,7 @@ class TradeClient
             $client->send($request)
         );
 
-        if ($response->IsError()) {
+        if ($response->isError()) {
             throw RequestException::create($request, $response);
         }
 
@@ -94,7 +94,7 @@ class TradeClient
      *
      * @return \GuzzleHttp\Client
      */
-    public function MakeDefaultHttpClient(): \GuzzleHttp\Client
+    public function makeDefaultHttpClient(): \GuzzleHttp\Client
     {
         return new \GuzzleHttp\Client([
             'base_uri' => $this->url,
@@ -110,7 +110,7 @@ class TradeClient
      * @param string $algo Sign algorithm.
      * @return string String that contains the signed request body.
      */
-    protected function SignBody(
+    protected function signBody(
         string $method,
         string $key,
         string $body,
@@ -125,7 +125,7 @@ class TradeClient
      * @param array $body Request body.
      * @return string
      */
-    protected function SerializeBody(array $body): string
+    protected function serializeBody(array $body): string
     {
         return json_encode($body);
     }
@@ -135,7 +135,7 @@ class TradeClient
      *
      * @return float
      */
-    protected function GetCurrentTimeStamp(): float
+    protected function getCurrentTimeStamp(): float
     {
         return round(microtime(true) * 1000);
     }

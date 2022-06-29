@@ -54,9 +54,9 @@ class PayeerResponse extends Response
     {
         $body = $response->getBody();
         $headers = $response->getHeaders();
-        $this->arrayResponse = $this->ConvertResponseToArray($response);
+        $this->arrayResponse = $this->convertResponseToArray($response);
 
-        $status = $this->ParseStatusCode($response, $this->arrayResponse);
+        $status = $this->parseStatusCode($response, $this->arrayResponse);
 
         parent::__construct($status, $headers, $body);
     }
@@ -66,10 +66,10 @@ class PayeerResponse extends Response
      *
      * @return array
      */
-    public function GetError(): array
+    public function getError(): array
     {
-        if ($this->IsError()) {
-            return $this->GetArrayValue($this->arrayResponse, 'error', []);
+        if ($this->isError()) {
+            return $this->getArrayValue($this->arrayResponse, 'error', []);
         }
 
         return [];
@@ -81,9 +81,9 @@ class PayeerResponse extends Response
      * @param array $content
      * @return string|null
      */
-    public function GetErrorCode(): string|null
+    public function getErrorCode(): string|null
     {
-        return $this->GetPayeerErrorCode($this->GetArrayResponse());
+        return $this->getPayeerErrorCode($this->getArrayResponse());
     }
 
     /**
@@ -91,7 +91,7 @@ class PayeerResponse extends Response
      *
      * @return boolean
      */
-    public function IsError(): bool
+    public function isError(): bool
     {
         return $this->getStatusCode() >= 400;
     }
@@ -101,7 +101,7 @@ class PayeerResponse extends Response
      *
      * @return boolean
      */
-    public function IsSuccess(): bool
+    public function isSuccess(): bool
     {
         return !$this->IsError();
     }
@@ -111,7 +111,7 @@ class PayeerResponse extends Response
      *
      * @return array
      */
-    public function GetArrayResponse(): array
+    public function getArrayResponse(): array
     {
         return $this->arrayResponse;
     }
@@ -123,7 +123,7 @@ class PayeerResponse extends Response
      * @param array $content
      * @return integer Status code.
      */
-    protected function ParseStatusCode(ResponseInterface $response, array $content): int
+    protected function parseStatusCode(ResponseInterface $response, array $content): int
     {
         $statusCode = $response->getStatusCode();
 
@@ -131,11 +131,11 @@ class PayeerResponse extends Response
             return $statusCode;
         }
 
-        if ($this->GetArrayValue($content, 'success') === true) {
+        if ($this->getArrayValue($content, 'success') === true) {
             return $statusCode;
         }
 
-        $errorCode = $this->GetPayeerErrorCode($content);
+        $errorCode = $this->getPayeerErrorCode($content);
         $isBadRequest = in_array($errorCode, static::BAD_REQUEST_CODES);
 
         return $isBadRequest
@@ -149,7 +149,7 @@ class PayeerResponse extends Response
      * @param ResponseInterface $response
      * @return array
      */
-    protected function ConvertResponseToArray(ResponseInterface $response): array
+    protected function convertResponseToArray(ResponseInterface $response): array
     {
         $body = $response->getBody();
         $content = $body->getContents();
@@ -166,10 +166,10 @@ class PayeerResponse extends Response
      * @param array $content
      * @return string|null
      */
-    private function GetPayeerErrorCode(array $content): string|null
+    private function getPayeerErrorCode(array $content): string|null
     {
-        $error = $this->GetArrayValue($content, 'error');
-        $errorCode = $this->GetArrayValue($error, 'code');
+        $error = $this->getArrayValue($content, 'error');
+        $errorCode = $this->getArrayValue($error, 'code');
 
         return $errorCode;
     }
@@ -184,7 +184,7 @@ class PayeerResponse extends Response
      * @param mixed $default Default value
      * @return mixed|null
      */
-    private function GetArrayValue(array|null $array, string $key, mixed $default = null)
+    private function getArrayValue(array|null $array, string $key, mixed $default = null)
     {
         if (is_null($key)) {
             return $array;
